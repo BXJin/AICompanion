@@ -36,8 +36,9 @@ This is Phase 0 skeleton only:
 - SQLAlchemy session setup.
 - Alembic migration for `users` and `user_sessions`.
 - Alembic migration for v1 domain baseline tables.
+- idempotent Airi seed and authenticated bootstrap aggregation.
 - common API schemas.
 - route/module boundaries.
 - mock LLM provider interface.
 
-Character seed/bootstrap expansion, real auth providers, chat turn, ledger services, relationship/memory services, and real admin workflows are intentionally next steps.
+Real auth providers, chat turn, ledger services, relationship/memory services, and real admin workflows are intentionally next steps.

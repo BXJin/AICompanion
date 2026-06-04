@@ -232,14 +232,14 @@ Recommended next engineering sequence:
 4. Guest auth/session persistence: done in `Server/`.
 5. `users` and `user_sessions` SQLAlchemy models/Alembic migration: done in `Server/`.
 6. v1 domain baseline SQLAlchemy models/Alembic migration from `18`: done in `Server/`.
-7. Seed Airi character and expand authenticated bootstrap.
+7. Seed Airi character and expand authenticated bootstrap: done in `Server/`.
 8. Implement Pydantic schemas from `25`.
-9. Implement credit ledger and quota service.
-10. Implement character/relationship/memory base services.
-11. Implement `POST /chat/turn` with mock provider.
-12. Implement date event rule engine from `19`.
-13. Implement reward/media async job skeleton.
-14. Implement provider usage events and cost dashboard data path.
+9. Implement `POST /chat/turn` with mock provider.
+10. Implement provider usage events and cost dashboard data path.
+11. Implement character/relationship/memory base services.
+12. Implement credit ledger and quota service.
+13. Implement date event rule engine from `19`.
+14. Implement reward/media async job skeleton.
 15. Implement minimum admin API.
 16. Add mobile Flutter skeleton around `16` IA.
 17. Run mock-provider load tests from `27`.
