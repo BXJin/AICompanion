@@ -112,6 +112,9 @@
 33. `33-Commercial-v1-decision-register.md`
     - PM/engineering decision register, development defaults, beta/commercial launch blockers.
 
+34. `34-Companion-mini-game-content-candidate-research.md`
+    - v1.1+ companion mini-game candidate, board-game engine/license risk, reward/penalty, relationship branch, season ending planning.
+
 ## Archive
 
 중복되던 짧은 초안 문서는 `_archive/commercial-drafts-20260602/`로 이동했다. 최신 상용 설계 기준은 이 index에 적힌 문서만 따른다.

@@ -39,6 +39,7 @@
 | 모바일 API | `17` | covered | endpoint, error, idempotency 기준 있음 |
 | DB/ledger | `07`, `18` | covered | migration 수준 table/constraint/transaction 있음 |
 | date event rule | `19` | covered | 3개 event deterministic rule 있음 |
+| mini-game/ending content | `34` | planning added | v1.1+ board-game candidates, reward/penalty, relationship branch, season ending criteria added; not v1 implementation scope |
 | plan/credit | `20` | covered with placeholders | allowance/credit/refund 기준 있음, 가격은 placeholder |
 | admin minimum | `21` | covered | 6개 필수 화면/RBAC/audit 있음 |
 | Airi profile | `22` | covered | tone/safety/voice/visual 기준 있음 |

@@ -32,6 +32,7 @@
 | P-005 | Shop placement | decided | no bottom tab, contextual entry | same unless conversion test changes | PM |
 | P-006 | Live voice call | decided | excluded | separate roadmap decision | PM/Engineering |
 | P-007 | Multi-character/UGC marketplace | decided | excluded | separate roadmap decision | PM |
+| P-008 | Board-game mini-game pack | dev_default | keep v1 to 3 official date events; research v1.1+ Quick Connect/Gomoku/Reversi; exclude poker/casino-like content | PM-approved game list, engine license review, store policy review before implementation | PM/Engineering/Legal |
 
 ## 3. Account and age decisions
 
@@ -184,4 +185,3 @@ Any change to these decisions must update affected documents:
 - Provider/cost: `29`.
 - Ops/security/analytics: `30`.
 - QA/release: `32`.
-

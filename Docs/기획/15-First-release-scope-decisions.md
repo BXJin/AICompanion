@@ -194,6 +194,7 @@ main chat
 - 짧은 voice input.
 - 제한적 TTS.
 - 3 official date events.
+- Board-game mini-game pack은 v1.1+ 후보로 분리한다. v1 구현 범위에는 넣지 않는다.
 - 8~12 relationship levels.
 - weekly/basic image reward.
 - Airi diary/note.
@@ -221,6 +222,7 @@ main chat
 - First-run: age gate, login/guest start, AI/privacy disclosure, Airi intro, first chat.
 - Core proof: 첫 세션 안에 memory/relationship/reward 중 최소 1개 이상 피드백.
 - Date events: Movie talk date, Comfort date, Weekend plan date.
+- Board-game candidates, game reward/penalty, relationship branch, season ending planning: `34-Companion-mini-game-content-candidate-research.md`.
 - Rule ownership: date result, reward unlock, relationship delta는 rule engine/ledger가 담당.
 - AI ownership: Airi reply, emotion, hint, diary, memory summary.
 - Safety: explicit adult, minor-like romance, nude/sexual image generation 금지.
