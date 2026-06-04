@@ -235,21 +235,22 @@ Recommended next engineering sequence:
 7. Seed Airi character and expand authenticated bootstrap: done in `Server/`.
 8. Implement Pydantic schemas from `25`.
 9. Implement `POST /chat/turn` with mock provider: done in `Server/`.
-10. Implement provider usage events and cost dashboard data path.
-11. Add persistent idempotency replay for chat/write APIs.
-12. Implement character/relationship/memory base services.
-13. Implement credit ledger and quota service.
-14. Implement date event rule engine from `19`.
-15. Implement reward/media async job skeleton.
-16. Implement minimum admin API.
-17. Add mobile Flutter skeleton around `16` IA.
-18. Run mock-provider load tests from `27`.
-19. Run provider benchmark/cost simulation from `29`.
-20. Apply store/legal/privacy launch checklist from `28`.
-21. Add production ops/security/observability/analytics baseline from `30`.
-22. Build mobile/admin UI baseline from `31`.
-23. Implement QA/release verification baseline from `32`.
-24. Track PM/engineering decisions from `33`.
+10. Implement chat provider usage event logging: done in `Server/`.
+11. Implement character/relationship/memory base services.
+12. Implement credit ledger and quota service.
+13. Implement date event rule engine from `19`.
+14. Implement reward/media async job skeleton.
+15. Implement minimum admin API.
+16. Implement provider cost dashboard data path.
+17. Add persistent idempotency replay for chat/write APIs.
+18. Add mobile Flutter skeleton around `16` IA.
+19. Run mock-provider load tests from `27`.
+20. Run provider benchmark/cost simulation from `29`.
+21. Apply store/legal/privacy launch checklist from `28`.
+22. Add production ops/security/observability/analytics baseline from `30`.
+23. Build mobile/admin UI baseline from `31`.
+24. Implement QA/release verification baseline from `32`.
+25. Track PM/engineering decisions from `33`.
 
 ## 6. Release gate checklist
 

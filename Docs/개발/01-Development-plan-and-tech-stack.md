@@ -609,6 +609,7 @@ Safety:
 - bootstrap endpoint 인증 적용 완료.
 - Airi character seed와 사용자별 초기 relationship snapshot을 보장하는 authenticated bootstrap 확장 완료.
 - authenticated `POST /api/mobile/v1/chat/turn` mock provider, conversation/message persistence 구현 완료.
+- mock chat turn provider usage event logging과 assistant message 연결 완료.
 - admin auth dependency skeleton 생성 완료.
 - billing webhook signature skeleton 생성 완료.
 - pytest smoke test 통과.
@@ -617,14 +618,14 @@ Safety:
 다음 구현 순서:
 
 1. OpenAPI/Pydantic schema 확장
-2. provider usage event logging 구현
-3. chat idempotency replay 저장 구조 보강
-4. relationship/memory service 구현
-5. quota/credit ledger service 구현
-6. date event rule engine 구현
-7. reward/media async job skeleton 구현
-8. admin minimum backend/API 구현
-9. provider benchmark/cost simulation 실행
+2. relationship/memory service 구현
+3. quota/credit ledger service 구현
+4. date event rule engine 구현
+5. reward/media async job skeleton 구현
+6. admin minimum backend/API 구현
+7. provider cost dashboard data path 구현
+8. provider benchmark/cost simulation 실행
+9. chat/write idempotency replay 저장 구조 보강
 10. store/legal/privacy launch checklist 반영
 11. production ops/security/observability/analytics baseline 구현
 12. mobile/admin UI baseline 구현

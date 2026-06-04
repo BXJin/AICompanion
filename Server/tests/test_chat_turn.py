@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from app.database import create_session
-from app.models.domain import Character, CharacterRelationshipSnapshot, Conversation, Message
+from app.models.domain import Character, CharacterRelationshipSnapshot, Conversation, Message, ProviderUsageEvent
 
 
 def _create_guest_session(client: TestClient) -> dict[str, object]:
@@ -81,6 +81,17 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
         assert assistant_message is not None
         assert assistant_message.role == "assistant"
         assert assistant_message.conversation_id == conversation.id
+        assert assistant_message.provider_usage_event_id is not None
+        provider_usage = db.get(ProviderUsageEvent, assistant_message.provider_usage_event_id)
+        assert provider_usage is not None
+        assert provider_usage.user_id == session["user_id"]
+        assert provider_usage.feature_route == "default_chat"
+        assert provider_usage.provider == "mock"
+        assert provider_usage.model == "mock-default_chat"
+        assert provider_usage.status == "success"
+        assert provider_usage.input_units == 10
+        assert provider_usage.output_units == 18
+        assert provider_usage.metadata_json == {"unit_type": "tokens"}
         assert character is not None
         assert snapshot is not None
     finally:

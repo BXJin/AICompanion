@@ -12,6 +12,7 @@ from app.repositories.conversations import ConversationRepository
 from app.repositories.messages import MessageRepository
 from app.services.airi_seed_service import AIRI_CHARACTER_ID, AiriSeedService
 from app.services.app_bootstrap_service import AppBootstrapService
+from app.services.provider_usage_service import ProviderUsageRecordCommand, ProviderUsageService
 
 
 @dataclass(frozen=True)
@@ -44,6 +45,7 @@ class ChatTurnService:
         self._conversations = ConversationRepository(db)
         self._messages = MessageRepository(db)
         self._airi_seed = AiriSeedService(db)
+        self._provider_usage = ProviderUsageService(db)
 
     async def create_turn(self, command: ChatTurnCommand) -> ChatTurnResult:
         if command.character_id != AIRI_CHARACTER_ID:
@@ -58,6 +60,14 @@ class ChatTurnService:
         history = self._messages.list_for_conversation(conversation_id=conversation.id)
         provider_messages = self._build_provider_messages(history=history, input_text=command.input_text)
         llm_response = await self._llm_provider.complete(route="default_chat", messages=provider_messages)
+        provider_usage = self._provider_usage.record_llm_usage(
+            ProviderUsageRecordCommand(
+                user_id=command.user_id,
+                feature_route="default_chat",
+                status="success",
+                provider_response=llm_response,
+            )
+        )
 
         now = datetime.now(UTC)
         user_message = self._messages.add(
@@ -82,7 +92,7 @@ class ChatTurnService:
                 role="assistant",
                 content_text=llm_response.text,
                 status="visible",
-                provider_usage_event_id=None,
+                provider_usage_event_id=provider_usage.id,
                 created_at=now,
             )
         )
