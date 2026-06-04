@@ -452,11 +452,12 @@ Load/cost tests later:
 9. Implement chat turn with mock LLM provider. Done in `Server/`.
 10. Implement chat provider usage event logging. Done in `Server/`.
 11. Implement chat relationship/memory base services. Done in `Server/`.
-12. Implement credit ledger and quota service.
+12. Implement credit ledger and quota service. Done in `Server/`.
 13. Implement date event rule engine and endpoints.
 14. Implement async job skeleton for TTS/image/memory.
-15. Implement admin minimum API.
-16. Add provider usage dashboard data endpoints.
+15. Implement billing webhook -> credit ledger integration.
+16. Implement admin minimum API.
+17. Add provider usage dashboard data endpoints.
 
 ## 11. Done criteria for backend skeleton
 

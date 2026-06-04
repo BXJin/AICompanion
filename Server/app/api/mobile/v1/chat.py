@@ -5,6 +5,7 @@ from fastapi import APIRouter, Header, HTTPException, status
 from app.dependencies import CurrentUserDep, DbSessionDep
 from app.schemas.chat import AiriReplyView, ChatTurnRequest, ChatTurnResponse, MemoryFeedbackView, RelationshipFeedbackView
 from app.services.chat_turn_service import ChatTurnCommand, ChatTurnService
+from app.services.quota_service import QuotaExceededError
 
 router = APIRouter(prefix="/chat", tags=["mobile-chat"])
 
@@ -28,6 +29,8 @@ async def create_chat_turn(
                 input_text=request.input.text,
             )
         )
+    except QuotaExceededError as exc:
+        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
 

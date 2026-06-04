@@ -1,7 +1,9 @@
 from datetime import UTC, datetime
 from decimal import Decimal
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, JSON, Numeric, String, Text
+from datetime import date
+
+from sqlalchemy import Date, DateTime, ForeignKey, Index, Integer, JSON, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -116,6 +118,43 @@ class CreditLedger(Base):
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class CreditBalanceSnapshot(Base):
+    __tablename__ = "credit_balance_snapshots"
+
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    bucket: Mapped[str] = mapped_column(String(32), primary_key=True)
+    balance: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    ledger_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
+
+
+class QuotaCounter(Base):
+    __tablename__ = "quota_counters"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    plan: Mapped[str] = mapped_column(String(32), nullable=False)
+    feature: Mapped[str] = mapped_column(String(64), nullable=False)
+    period_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    period_start: Mapped[date] = mapped_column(Date, nullable=False)
+    used_amount: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    limit_amount: Mapped[int] = mapped_column(Integer, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
+
+
+class PlanAllowance(Base):
+    __tablename__ = "plan_allowances"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    plan: Mapped[str] = mapped_column(String(32), nullable=False)
+    feature: Mapped[str] = mapped_column(String(64), nullable=False)
+    period_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    limit_amount: Mapped[int] = mapped_column(Integer, nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    enabled: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+
+
 class ProviderUsageEvent(Base):
     __tablename__ = "provider_usage_events"
 
@@ -154,7 +193,11 @@ Index("ix_memories_user_character_status_importance", Memory.user_id, Memory.cha
 Index("ix_memories_user_character_last_used", Memory.user_id, Memory.character_id, Memory.last_used_at)
 Index("ix_credit_ledger_user_created", CreditLedger.user_id, CreditLedger.created_at)
 Index("ix_credit_ledger_user_bucket_created", CreditLedger.user_id, CreditLedger.bucket, CreditLedger.created_at)
-Index("ux_credit_ledger_idempotency_key", CreditLedger.idempotency_key, unique=True)
+Index("ux_credit_ledger_user_idempotency_key", CreditLedger.user_id, CreditLedger.idempotency_key, unique=True)
+Index("ux_quota_counters_user_feature_period", QuotaCounter.user_id, QuotaCounter.feature, QuotaCounter.period_type, QuotaCounter.period_start, unique=True)
+Index("ix_quota_counters_user_updated", QuotaCounter.user_id, QuotaCounter.updated_at)
+Index("ux_plan_allowances_plan_feature_period_version", PlanAllowance.plan, PlanAllowance.feature, PlanAllowance.period_type, PlanAllowance.version, unique=True)
+Index("ix_plan_allowances_enabled", PlanAllowance.enabled)
 Index("ix_provider_usage_route_created", ProviderUsageEvent.feature_route, ProviderUsageEvent.created_at)
 Index("ix_provider_usage_provider_model_created", ProviderUsageEvent.provider, ProviderUsageEvent.model, ProviderUsageEvent.created_at)
 Index("ix_admin_audit_logs_admin_created", AdminAuditLog.admin_id, AdminAuditLog.created_at)

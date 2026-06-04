@@ -14,6 +14,7 @@ from app.services.airi_seed_service import AIRI_CHARACTER_ID, AiriSeedService
 from app.services.app_bootstrap_service import AppBootstrapService
 from app.services.memory_service import MemoryCandidateResult, MemoryService
 from app.services.provider_usage_service import ProviderUsageRecordCommand, ProviderUsageService
+from app.services.quota_service import QuotaService
 from app.services.relationship_state_service import RelationshipApplyResult, RelationshipDelta, RelationshipStateService
 
 
@@ -50,6 +51,7 @@ class ChatTurnService:
         self._messages = MessageRepository(db)
         self._airi_seed = AiriSeedService(db)
         self._provider_usage = ProviderUsageService(db)
+        self._quota = QuotaService(db)
         self._relationship_state = RelationshipStateService(db)
         self._memory_service = MemoryService(db)
 
@@ -63,6 +65,7 @@ class ChatTurnService:
             character=character,
             conversation_id=command.conversation_id,
         )
+        self._quota.consume(user_id=command.user_id, plan="free", feature="text_turn")
         history = self._messages.list_for_conversation(conversation_id=conversation.id)
         provider_messages = self._build_provider_messages(history=history, input_text=command.input_text)
         llm_response = await self._llm_provider.complete(route="default_chat", messages=provider_messages)

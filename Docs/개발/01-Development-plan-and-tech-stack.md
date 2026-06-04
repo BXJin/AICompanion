@@ -611,6 +611,7 @@ Safety:
 - authenticated `POST /api/mobile/v1/chat/turn` mock provider, conversation/message persistence 구현 완료.
 - mock chat turn provider usage event logging과 assistant message 연결 완료.
 - chat 기반 first relationship event/snapshot update와 preference memory candidate 생성 완료.
+- credit ledger grant/spend/refund/replay service와 daily quota counter 기반 chat text_turn 제한 구현 완료.
 - admin auth dependency skeleton 생성 완료.
 - billing webhook signature skeleton 생성 완료.
 - pytest smoke test 통과.
@@ -619,10 +620,10 @@ Safety:
 다음 구현 순서:
 
 1. OpenAPI/Pydantic schema 확장
-2. quota/credit ledger service 구현
-3. date event rule engine 구현
-4. memory activation/delete API와 async extraction job skeleton 구현
-5. reward/media async job skeleton 구현
+2. date event rule engine 구현
+3. memory activation/delete API와 async extraction job skeleton 구현
+4. reward/media async job skeleton 구현
+5. billing webhook -> credit ledger integration 구현
 6. admin minimum backend/API 구현
 7. provider cost dashboard data path 구현
 8. provider benchmark/cost simulation 실행

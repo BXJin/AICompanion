@@ -9,8 +9,10 @@ from app.models.domain import (
     Memory,
     Message,
     ProviderUsageEvent,
+    QuotaCounter,
     RelationshipEvent,
 )
+from app.services.quota_service import QuotaService
 
 
 def _create_guest_session(client: TestClient) -> dict[str, object]:
@@ -112,16 +114,38 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
             db.execute(select(RelationshipEvent).where(RelationshipEvent.user_id == session["user_id"])).scalars()
         )
         memories = list(db.execute(select(Memory).where(Memory.user_id == session["user_id"])).scalars())
+        quota_counter = db.query(QuotaCounter).filter_by(user_id=session["user_id"], feature="text_turn").one()
         assert [event.metadata_json["event_type"] for event in relationship_events] == [
             "first_chat_completed",
             "user_shared_preference",
         ]
+        assert quota_counter.used_amount == 1
+        assert quota_counter.limit_amount == 50
         assert len(memories) == 1
         assert memories[0].status == "candidate"
         assert memories[0].memory_type == "preference"
         assert memories[0].source_message_id == user_message.id
     finally:
         db.close()
+
+
+def test_chat_turn_returns_429_when_text_turn_quota_is_exhausted(client: TestClient, test_settings) -> None:  # type: ignore[no-untyped-def]
+    session = _create_guest_session(client)
+    db = create_session(test_settings)
+    try:
+        quota = QuotaService(db)
+        quota.consume(user_id=session["user_id"], plan="free", feature="text_turn", amount=50)
+        db.commit()
+    finally:
+        db.close()
+
+    response = client.post(
+        "/api/mobile/v1/chat/turn",
+        headers=_auth_headers(session, idempotency_key="chat-turn-quota-exceeded"),
+        json={"character_id": "airi", "input": {"type": "text", "text": "hello"}},
+    )
+
+    assert response.status_code == 429
 
 
 def test_chat_turn_can_continue_existing_conversation(client: TestClient, test_settings) -> None:  # type: ignore[no-untyped-def]

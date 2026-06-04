@@ -40,11 +40,12 @@ This is Phase 0 skeleton only:
 - authenticated `POST /api/mobile/v1/chat/turn` with conversation/message persistence and mock LLM replies.
 - provider usage event logging for mock chat turns.
 - relationship event/snapshot updates and preference memory candidates for chat turns.
+- credit ledger grant/spend/refund/replay service and daily quota counters for chat text turns.
 - common API schemas.
 - route/module boundaries.
 - mock LLM provider interface.
 
-Real auth providers, ledger services, memory activation/delete APIs, provider cost dashboard endpoints, and real admin workflows are intentionally next steps.
+Real auth providers, billing webhook ledger integration, memory activation/delete APIs, provider cost dashboard endpoints, and real admin workflows are intentionally next steps.
 
 Known current chat limits:
 

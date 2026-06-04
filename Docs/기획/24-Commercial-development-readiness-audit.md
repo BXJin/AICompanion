@@ -237,21 +237,22 @@ Recommended next engineering sequence:
 9. Implement `POST /chat/turn` with mock provider: done in `Server/`.
 10. Implement chat provider usage event logging: done in `Server/`.
 11. Implement chat relationship event/snapshot update and preference memory candidates: done in `Server/`.
-12. Implement credit ledger and quota service.
+12. Implement credit ledger and quota service: done in `Server/`.
 13. Implement date event rule engine from `19`.
 14. Implement memory activation/delete API and async extraction job skeleton.
 15. Implement reward/media async job skeleton.
-16. Implement minimum admin API.
-17. Implement provider cost dashboard data path.
-18. Add persistent idempotency replay for chat/write APIs.
-19. Add mobile Flutter skeleton around `16` IA.
-20. Run mock-provider load tests from `27`.
-21. Run provider benchmark/cost simulation from `29`.
-22. Apply store/legal/privacy launch checklist from `28`.
-23. Add production ops/security/observability/analytics baseline from `30`.
-24. Build mobile/admin UI baseline from `31`.
-25. Implement QA/release verification baseline from `32`.
-26. Track PM/engineering decisions from `33`.
+16. Implement billing webhook -> credit ledger integration.
+17. Implement minimum admin API.
+18. Implement provider cost dashboard data path.
+19. Add persistent idempotency replay for chat/write APIs.
+20. Add mobile Flutter skeleton around `16` IA.
+21. Run mock-provider load tests from `27`.
+22. Run provider benchmark/cost simulation from `29`.
+23. Apply store/legal/privacy launch checklist from `28`.
+24. Add production ops/security/observability/analytics baseline from `30`.
+25. Build mobile/admin UI baseline from `31`.
+26. Implement QA/release verification baseline from `32`.
+27. Track PM/engineering decisions from `33`.
 
 ## 6. Release gate checklist
 

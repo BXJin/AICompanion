@@ -8,6 +8,7 @@ from app.models.user import User
 from app.repositories.relationships import RelationshipRepository
 from app.repositories.users import UserRepository
 from app.services.airi_seed_service import AiriSeedService
+from app.services.quota_service import QuotaService
 
 
 @dataclass(frozen=True)
@@ -67,6 +68,7 @@ class AppBootstrapService:
         self._users = UserRepository(db)
         self._relationships = RelationshipRepository(db)
         self._airi_seed = AiriSeedService(db)
+        self._quota = QuotaService(db)
 
     def get_bootstrap(self, *, user_id: str) -> AppBootstrapResult:
         user = self._users.get(user_id)
@@ -75,6 +77,10 @@ class AppBootstrapService:
 
         character = self._airi_seed.ensure_airi_character()
         relationship = self._ensure_initial_relationship(user=user, character=character)
+        text_turn_quota = self._quota.remaining(user_id=user.id, plan="free", feature="text_turn")
+        voice_quota = self._quota.remaining(user_id=user.id, plan="free", feature="voice_second")
+        tts_quota = self._quota.remaining(user_id=user.id, plan="free", feature="tts_reply")
+        image_quota = self._quota.remaining(user_id=user.id, plan="free", feature="image_reward")
         self._db.commit()
 
         return AppBootstrapResult(
@@ -94,10 +100,10 @@ class AppBootstrapService:
                 next_unlock_hint="First Airi note",
             ),
             quota=BootstrapQuota(
-                text_turns_remaining=50,
-                voice_seconds_remaining=60,
-                tts_replies_remaining=5,
-                image_rewards_remaining=1,
+                text_turns_remaining=text_turn_quota.remaining,
+                voice_seconds_remaining=voice_quota.remaining,
+                tts_replies_remaining=tts_quota.remaining,
+                image_rewards_remaining=image_quota.remaining,
             ),
             daily=BootstrapDaily(
                 greeting="Airi is ready to chat.",

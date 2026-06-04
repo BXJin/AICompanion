@@ -13,9 +13,12 @@ from app.models.domain import (
     CharacterRelationshipSnapshot,
     Conversation,
     CreditLedger,
+    CreditBalanceSnapshot,
     Memory,
     Message,
+    PlanAllowance,
     ProviderUsageEvent,
+    QuotaCounter,
     RelationshipEvent,
 )
 from app.models.user import User
@@ -34,6 +37,9 @@ def test_domain_baseline_tables_are_registered() -> None:
         "relationship_events",
         "memories",
         "credit_ledger",
+        "credit_balance_snapshots",
+        "quota_counters",
+        "plan_allowances",
         "provider_usage_events",
         "admin_audit_logs",
     }
@@ -44,7 +50,7 @@ def test_domain_baseline_tables_are_registered() -> None:
 def test_credit_ledger_idempotency_key_is_unique() -> None:
     indexes = {index.name: index for index in CreditLedger.__table__.indexes}
 
-    assert indexes["ux_credit_ledger_idempotency_key"].unique is True
+    assert indexes["ux_credit_ledger_user_idempotency_key"].unique is True
 
 
 def test_domain_baseline_models_can_be_persisted(client: TestClient, test_settings) -> None:  # type: ignore[no-untyped-def]
