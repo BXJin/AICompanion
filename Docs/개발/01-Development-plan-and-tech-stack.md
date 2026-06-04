@@ -605,6 +605,7 @@ Safety:
 - `/api/mobile/v1`, `/api/admin/v1`, `/api/webhooks/v1` prefix boundary 생성 완료.
 - guest auth/session persistence 생성 완료.
 - `users`, `user_sessions` SQLAlchemy model과 Alembic migration 생성 완료.
+- character, conversation/message, relationship snapshot/event, memory, credit ledger, provider usage, admin audit log 최소 SQLAlchemy model과 Alembic migration 생성 완료.
 - bootstrap endpoint 인증 적용 완료.
 - admin auth dependency skeleton 생성 완료.
 - billing webhook signature skeleton 생성 완료.
@@ -613,22 +614,21 @@ Safety:
 
 다음 구현 순서:
 
-1. OpenAPI/Pydantic schema 확장
-2. full domain Alembic migration 작성
-3. character seed와 bootstrap endpoint 확장
-4. chat turn mock provider 구현
+1. character seed와 authenticated bootstrap endpoint 확장
+2. OpenAPI/Pydantic schema 확장
+3. chat turn mock provider 구현
+4. provider usage event logging 구현
 5. relationship/memory service 구현
 6. quota/credit ledger service 구현
 7. date event rule engine 구현
 8. reward/media async job skeleton 구현
 9. admin minimum backend/API 구현
-10. provider adapter/usage logging 구현
-11. provider benchmark/cost simulation 실행
-12. store/legal/privacy launch checklist 반영
-13. production ops/security/observability/analytics baseline 구현
-14. mobile/admin UI baseline 구현
-15. QA/release verification baseline 구현
-16. PM/engineering decision register 반영
+10. provider benchmark/cost simulation 실행
+11. store/legal/privacy launch checklist 반영
+12. production ops/security/observability/analytics baseline 구현
+13. mobile/admin UI baseline 구현
+14. QA/release verification baseline 구현
+15. PM/engineering decision register 반영
 
 PromptMotionLab 재사용은 `02-Bottleneck-reuse-and-mobile-stack.md`의 판단을 따른다. 특히 provider routing, Airi profile, timeout/fallback, segmented TTS, latency metric은 우선 재사용 후보이고, in-memory session/job/audio/CSV 구조는 상용 서비스용으로 재설계한다.
 

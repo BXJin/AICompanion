@@ -35,8 +35,9 @@ This is Phase 0 skeleton only:
 - webhook signature dependency skeleton.
 - SQLAlchemy session setup.
 - Alembic migration for `users` and `user_sessions`.
+- Alembic migration for v1 domain baseline tables.
 - common API schemas.
 - route/module boundaries.
 - mock LLM provider interface.
 
-Full domain DB migrations, real auth providers, chat turn, ledger, relationship, and real admin workflows are intentionally next steps.
+Character seed/bootstrap expansion, real auth providers, chat turn, ledger services, relationship/memory services, and real admin workflows are intentionally next steps.

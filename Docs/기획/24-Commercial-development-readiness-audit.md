@@ -231,23 +231,24 @@ Recommended next engineering sequence:
 3. Mobile/admin/webhook route boundary: done in `Server/`.
 4. Guest auth/session persistence: done in `Server/`.
 5. `users` and `user_sessions` SQLAlchemy models/Alembic migration: done in `Server/`.
-6. Implement remaining SQLAlchemy models and Alembic migrations from `18`.
-7. Implement Pydantic schemas from `25`.
-8. Implement credit ledger and quota service.
-9. Implement character/relationship/memory base services.
-10. Implement `POST /chat/turn` with mock provider.
-11. Implement date event rule engine from `19`.
-12. Implement reward/media async job skeleton.
-13. Implement provider usage events and cost dashboard data path.
-14. Implement minimum admin API.
-15. Add mobile Flutter skeleton around `16` IA.
-16. Run mock-provider load tests from `27`.
-17. Run provider benchmark/cost simulation from `29`.
-18. Apply store/legal/privacy launch checklist from `28`.
-19. Add production ops/security/observability/analytics baseline from `30`.
-20. Build mobile/admin UI baseline from `31`.
-21. Implement QA/release verification baseline from `32`.
-22. Track PM/engineering decisions from `33`.
+6. v1 domain baseline SQLAlchemy models/Alembic migration from `18`: done in `Server/`.
+7. Seed Airi character and expand authenticated bootstrap.
+8. Implement Pydantic schemas from `25`.
+9. Implement credit ledger and quota service.
+10. Implement character/relationship/memory base services.
+11. Implement `POST /chat/turn` with mock provider.
+12. Implement date event rule engine from `19`.
+13. Implement reward/media async job skeleton.
+14. Implement provider usage events and cost dashboard data path.
+15. Implement minimum admin API.
+16. Add mobile Flutter skeleton around `16` IA.
+17. Run mock-provider load tests from `27`.
+18. Run provider benchmark/cost simulation from `29`.
+19. Apply store/legal/privacy launch checklist from `28`.
+20. Add production ops/security/observability/analytics baseline from `30`.
+21. Build mobile/admin UI baseline from `31`.
+22. Implement QA/release verification baseline from `32`.
+23. Track PM/engineering decisions from `33`.
 
 ## 6. Release gate checklist
 
