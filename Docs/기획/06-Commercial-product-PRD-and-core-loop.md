@@ -42,7 +42,7 @@
 daily entry
 -> character greeting with remembered context
 -> user chat or date suggestion
--> mini-game/date event
+-> shared activity/date event/mini-game
 -> deterministic game result
 -> AI companion reaction
 -> relationship state update

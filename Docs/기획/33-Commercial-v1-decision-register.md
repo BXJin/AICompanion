@@ -32,7 +32,7 @@
 | P-005 | Shop placement | decided | no bottom tab, contextual entry | same unless conversion test changes | PM |
 | P-006 | Live voice call | decided | excluded | separate roadmap decision | PM/Engineering |
 | P-007 | Multi-character/UGC marketplace | decided | excluded | separate roadmap decision | PM |
-| P-008 | Board-game mini-game pack | dev_default | keep v1 to 3 official date events; research v1.1+ Quick Connect/Gomoku/Reversi; exclude poker/casino-like content | PM-approved game list, engine license review, store policy review before implementation | PM/Engineering/Legal |
+| P-008 | Shared Activity expansion | dev_default | keep v1 to 3 official date events as proof; plan v1.1+ shared activity framework covering mini-games, media reflection, co-planning, comfort routine, season arcs | PM-approved first v1.1 activity, engine/license review if game-based, store policy review before implementation | PM/Engineering/Legal |
 
 ## 3. Account and age decisions
 

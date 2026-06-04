@@ -2,7 +2,7 @@
 
 작성일: 2026-06-04
 
-이 문서는 AI Companion의 date event 이후 확장할 2인 보드게임/미니게임 콘텐츠, 보상/패널티, 관계 분기, 엔딩 구조를 정리한다.
+이 문서는 `35-Shared-activity-system-spec.md`의 하위 연구 문서로, AI Companion의 date event 이후 확장할 2인 보드게임/미니게임 콘텐츠, 보상/패널티, 관계 분기, 엔딩 구조를 정리한다.
 
 기준 문서:
 
@@ -11,6 +11,7 @@
 - `16-Mobile-user-journey-and-screen-IA.md`
 - `19-Date-event-rule-spec.md`
 - `23-Relationship-memory-rule-table.md`
+- `35-Shared-activity-system-spec.md`
 
 ## 1. 결론
 
@@ -18,10 +19,10 @@
 
 하지만 사용자가 말한 체스, 오목, 루미큐브류, 포커류 같은 "실제 보드게임 콘텐츠"와 승패별 반응, 장기 relationship branch, happy/bad ending은 아직 상세 기획으로 충분히 표현되어 있지 않다.
 
-따라서 상용 v1의 판단은 다음이 맞다.
+따라서 상용 v1/v1.1의 판단은 다음이 맞다.
 
 1. 첫 release에는 기존 3개 date event를 유지한다.
-2. 보드게임은 v1.1 이후 "Companion mini-game pack"으로 분리한다.
+2. 보드게임은 v1.1 이후 Shared Activity의 "Companion mini-game pack"으로 분리한다.
 3. 포커/카지노형 게임은 store policy와 gambling 오해 리스크 때문에 제외한다.
 4. 패널티는 paid credit 차감이나 관계 레벨 하락이 아니라 mood, cooldown, missed bonus, repair event 중심으로 설계한다.
 5. ending은 영구 실패가 아니라 season arc outcome으로 만든다. 사용자가 언제든 repair path로 회복할 수 있어야 한다.

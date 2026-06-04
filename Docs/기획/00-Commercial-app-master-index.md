@@ -115,6 +115,9 @@
 34. `34-Companion-mini-game-content-candidate-research.md`
     - v1.1+ companion mini-game candidate, board-game engine/license risk, reward/penalty, relationship branch, season ending planning.
 
+35. `35-Shared-activity-system-spec.md`
+    - AI와 함께하는 date event, mini-game, media reflection, co-planning, comfort routine, season arc를 하나의 Shared Activity framework로 묶는 제품/개발 기준.
+
 ## Archive
 
 중복되던 짧은 초안 문서는 `_archive/commercial-drafts-20260602/`로 이동했다. 최신 상용 설계 기준은 이 index에 적힌 문서만 따른다.
