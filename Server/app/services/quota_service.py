@@ -13,6 +13,7 @@ DEFAULT_ALLOWANCES = {
     ("free", "voice_second", "daily"): 60,
     ("free", "tts_reply", "daily"): 5,
     ("free", "image_reward", "daily"): 1,
+    ("free", "date_event", "daily"): 3,
 }
 
 

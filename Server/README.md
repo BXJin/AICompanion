@@ -41,13 +41,15 @@ This is Phase 0 skeleton only:
 - provider usage event logging for mock chat turns.
 - relationship event/snapshot updates and preference memory candidates for chat turns.
 - credit ledger grant/spend/refund/replay service and daily quota counters for chat text turns.
+- deterministic date event list/start/move/finish APIs with rule-based relationship and reward event outputs.
 - common API schemas.
 - route/module boundaries.
 - mock LLM provider interface.
 
-Real auth providers, billing webhook ledger integration, memory activation/delete APIs, provider cost dashboard endpoints, and real admin workflows are intentionally next steps.
+Real auth providers, billing webhook ledger integration, memory activation/delete APIs, reward/media async jobs, provider cost dashboard endpoints, and real admin workflows are intentionally next steps.
 
 Known current chat limits:
 
 - `Idempotency-Key` is required, but duplicate replay needs a later message/idempotency storage migration.
 - memory extraction is currently a deterministic preference candidate, not an async LLM extraction job.
+- date finish creates reward events, but media generation/reward fulfillment jobs are not implemented yet.

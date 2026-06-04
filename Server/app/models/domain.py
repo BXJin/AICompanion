@@ -1,7 +1,5 @@
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from decimal import Decimal
-
-from datetime import date
 
 from sqlalchemy import Date, DateTime, ForeignKey, Index, Integer, JSON, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -155,6 +153,73 @@ class PlanAllowance(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
 
 
+class DateEventTemplate(Base):
+    __tablename__ = "date_event_templates"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    event_code: Mapped[str] = mapped_column(String(64), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    title: Mapped[str] = mapped_column(String(128), nullable=False)
+    required_relationship_level: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    entry_cost: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    estimated_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=5)
+    reward_policy_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False, default=dict)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="public")
+    enabled: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+
+
+class DateGameSession(Base):
+    __tablename__ = "date_game_sessions"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    character_id: Mapped[str] = mapped_column(ForeignKey("characters.id"), nullable=False, index=True)
+    template_id: Mapped[str] = mapped_column(ForeignKey("date_event_templates.id"), nullable=False, index=True)
+    template_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="active")
+    result: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    score: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    state_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False, default=dict)
+    reward_event_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    relationship_event_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    idempotency_key: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class GameMove(Base):
+    __tablename__ = "game_moves"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    session_id: Mapped[str] = mapped_column(ForeignKey("date_game_sessions.id"), nullable=False, index=True)
+    sequence_no: Mapped[int] = mapped_column(Integer, nullable=False)
+    actor: Mapped[str] = mapped_column(String(32), nullable=False)
+    move_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False, default=dict)
+    rule_result_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False, default=dict)
+    idempotency_key: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+
+
+class RewardEvent(Base):
+    __tablename__ = "reward_events"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    character_id: Mapped[str] = mapped_column(ForeignKey("characters.id"), nullable=False, index=True)
+    source_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    source_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    reward_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    reward_ref: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
+    rule_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    idempotency_key: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now)
+
+
 class ProviderUsageEvent(Base):
     __tablename__ = "provider_usage_events"
 
@@ -198,6 +263,15 @@ Index("ux_quota_counters_user_feature_period", QuotaCounter.user_id, QuotaCounte
 Index("ix_quota_counters_user_updated", QuotaCounter.user_id, QuotaCounter.updated_at)
 Index("ux_plan_allowances_plan_feature_period_version", PlanAllowance.plan, PlanAllowance.feature, PlanAllowance.period_type, PlanAllowance.version, unique=True)
 Index("ix_plan_allowances_enabled", PlanAllowance.enabled)
+Index("ux_date_event_templates_code_version", DateEventTemplate.event_code, DateEventTemplate.version, unique=True)
+Index("ix_date_event_templates_public", DateEventTemplate.enabled, DateEventTemplate.status)
+Index("ix_date_game_sessions_user_character_started", DateGameSession.user_id, DateGameSession.character_id, DateGameSession.started_at)
+Index("ix_date_game_sessions_user_status_started", DateGameSession.user_id, DateGameSession.status, DateGameSession.started_at)
+Index("ux_date_game_sessions_user_idempotency_key", DateGameSession.user_id, DateGameSession.idempotency_key, unique=True)
+Index("ux_game_moves_session_sequence", GameMove.session_id, GameMove.sequence_no, unique=True)
+Index("ux_game_moves_session_idempotency_key", GameMove.session_id, GameMove.idempotency_key, unique=True)
+Index("ix_reward_events_user_character_created", RewardEvent.user_id, RewardEvent.character_id, RewardEvent.created_at)
+Index("ux_reward_events_source_reward", RewardEvent.user_id, RewardEvent.source_type, RewardEvent.source_id, RewardEvent.reward_type, unique=True)
 Index("ix_provider_usage_route_created", ProviderUsageEvent.feature_route, ProviderUsageEvent.created_at)
 Index("ix_provider_usage_provider_model_created", ProviderUsageEvent.provider, ProviderUsageEvent.model, ProviderUsageEvent.created_at)
 Index("ix_admin_audit_logs_admin_created", AdminAuditLog.admin_id, AdminAuditLog.created_at)

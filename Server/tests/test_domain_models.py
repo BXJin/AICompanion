@@ -14,12 +14,16 @@ from app.models.domain import (
     Conversation,
     CreditLedger,
     CreditBalanceSnapshot,
+    DateEventTemplate,
+    DateGameSession,
+    GameMove,
     Memory,
     Message,
     PlanAllowance,
     ProviderUsageEvent,
     QuotaCounter,
     RelationshipEvent,
+    RewardEvent,
 )
 from app.models.user import User
 
@@ -40,6 +44,10 @@ def test_domain_baseline_tables_are_registered() -> None:
         "credit_balance_snapshots",
         "quota_counters",
         "plan_allowances",
+        "date_event_templates",
+        "date_game_sessions",
+        "game_moves",
+        "reward_events",
         "provider_usage_events",
         "admin_audit_logs",
     }

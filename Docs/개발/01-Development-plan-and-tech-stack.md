@@ -612,6 +612,7 @@ Safety:
 - mock chat turn provider usage event logging과 assistant message 연결 완료.
 - chat 기반 first relationship event/snapshot update와 preference memory candidate 생성 완료.
 - credit ledger grant/spend/refund/replay service와 daily quota counter 기반 chat text_turn 제한 구현 완료.
+- 3개 official date event list/start/move/finish, deterministic rule scoring, relationship/reward event output 구현 완료.
 - admin auth dependency skeleton 생성 완료.
 - billing webhook signature skeleton 생성 완료.
 - pytest smoke test 통과.
@@ -620,19 +621,18 @@ Safety:
 다음 구현 순서:
 
 1. OpenAPI/Pydantic schema 확장
-2. date event rule engine 구현
-3. memory activation/delete API와 async extraction job skeleton 구현
-4. reward/media async job skeleton 구현
-5. billing webhook -> credit ledger integration 구현
-6. admin minimum backend/API 구현
-7. provider cost dashboard data path 구현
-8. provider benchmark/cost simulation 실행
-9. chat/write idempotency replay 저장 구조 보강
-10. store/legal/privacy launch checklist 반영
-11. production ops/security/observability/analytics baseline 구현
-12. mobile/admin UI baseline 구현
-13. QA/release verification baseline 구현
-14. PM/engineering decision register 반영
+2. memory activation/delete API와 async extraction job skeleton 구현
+3. reward/media async job skeleton 구현
+4. billing webhook -> credit ledger integration 구현
+5. admin minimum backend/API 구현
+6. provider cost dashboard data path 구현
+7. provider benchmark/cost simulation 실행
+8. chat/write idempotency replay 저장 구조 보강
+9. store/legal/privacy launch checklist 반영
+10. production ops/security/observability/analytics baseline 구현
+11. mobile/admin UI baseline 구현
+12. QA/release verification baseline 구현
+13. PM/engineering decision register 반영
 
 PromptMotionLab 재사용은 `02-Bottleneck-reuse-and-mobile-stack.md`의 판단을 따른다. 특히 provider routing, Airi profile, timeout/fallback, segmented TTS, latency metric은 우선 재사용 후보이고, in-memory session/job/audio/CSV 구조는 상용 서비스용으로 재설계한다.
 

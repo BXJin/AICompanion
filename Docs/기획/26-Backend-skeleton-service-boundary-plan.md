@@ -453,7 +453,7 @@ Load/cost tests later:
 10. Implement chat provider usage event logging. Done in `Server/`.
 11. Implement chat relationship/memory base services. Done in `Server/`.
 12. Implement credit ledger and quota service. Done in `Server/`.
-13. Implement date event rule engine and endpoints.
+13. Implement date event rule engine and endpoints. Done in `Server/`.
 14. Implement async job skeleton for TTS/image/memory.
 15. Implement billing webhook -> credit ledger integration.
 16. Implement admin minimum API.

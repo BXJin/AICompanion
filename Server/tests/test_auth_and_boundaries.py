@@ -75,6 +75,8 @@ def test_openapi_exposes_separate_api_boundaries(client: TestClient) -> None:
     assert "/api/mobile/v1/auth/session" in paths
     assert "/api/mobile/v1/app/bootstrap" in paths
     assert "/api/mobile/v1/chat/turn" in paths
+    assert "/api/mobile/v1/date-events" in paths
+    assert "/api/mobile/v1/date-events/{event_id}/start" in paths
     assert "/api/admin/v1/users/me" in paths
     assert "/api/webhooks/v1/billing/google-play" in paths
     assert "/api/webhooks/v1/billing/apple" in paths
