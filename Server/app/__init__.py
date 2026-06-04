@@ -1,0 +1,2 @@
+"""AI Companion backend package."""
+
