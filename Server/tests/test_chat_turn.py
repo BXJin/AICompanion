@@ -2,7 +2,15 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from app.database import create_session
-from app.models.domain import Character, CharacterRelationshipSnapshot, Conversation, Message, ProviderUsageEvent
+from app.models.domain import (
+    Character,
+    CharacterRelationshipSnapshot,
+    Conversation,
+    Memory,
+    Message,
+    ProviderUsageEvent,
+    RelationshipEvent,
+)
 
 
 def _create_guest_session(client: TestClient) -> dict[str, object]:
@@ -57,8 +65,11 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
     assert payload["reply"]["emotion"] == "warm"
     assert payload["reply"]["intent"] == "chat"
     assert "I like quiet movies." in payload["reply"]["text"]
-    assert payload["relationship_feedback"] is None
-    assert payload["memory_feedback"] is None
+    assert payload["relationship_feedback"]["changed"] is True
+    assert payload["relationship_feedback"]["summary"] == "Affinity +2, Familiarity +1, Familiarity +1"
+    assert payload["relationship_feedback"]["event_id"]
+    assert payload["memory_feedback"]["candidate_created"] is True
+    assert payload["memory_feedback"]["summary"] == "User shared a preference: I like quiet movies."
 
     db = create_session(test_settings)
     try:
@@ -94,6 +105,21 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
         assert provider_usage.metadata_json == {"unit_type": "tokens"}
         assert character is not None
         assert snapshot is not None
+        assert snapshot.affinity == 12
+        assert snapshot.trust == 5
+        assert snapshot.familiarity == 2
+        relationship_events = list(
+            db.execute(select(RelationshipEvent).where(RelationshipEvent.user_id == session["user_id"])).scalars()
+        )
+        memories = list(db.execute(select(Memory).where(Memory.user_id == session["user_id"])).scalars())
+        assert [event.metadata_json["event_type"] for event in relationship_events] == [
+            "first_chat_completed",
+            "user_shared_preference",
+        ]
+        assert len(memories) == 1
+        assert memories[0].status == "candidate"
+        assert memories[0].memory_type == "preference"
+        assert memories[0].source_message_id == user_message.id
     finally:
         db.close()
 
@@ -116,10 +142,14 @@ def test_chat_turn_can_continue_existing_conversation(client: TestClient, test_s
 
     assert second.status_code == 200
     assert second.json()["conversation_id"] == conversation_id
+    assert second.json()["relationship_feedback"]["changed"] is False
+    assert second.json()["memory_feedback"]["candidate_created"] is False
 
     db = create_session(test_settings)
     try:
         messages = list(db.execute(select(Message).where(Message.conversation_id == conversation_id)).scalars())
+        events = list(db.execute(select(RelationshipEvent).where(RelationshipEvent.user_id == session["user_id"])).scalars())
         assert len(messages) == 4
+        assert [event.metadata_json["event_type"] for event in events] == ["first_chat_completed"]
     finally:
         db.close()

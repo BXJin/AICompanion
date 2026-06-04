@@ -451,11 +451,12 @@ Load/cost tests later:
 8. Implement character seed and bootstrap endpoint. Done in `Server/`.
 9. Implement chat turn with mock LLM provider. Done in `Server/`.
 10. Implement chat provider usage event logging. Done in `Server/`.
-11. Implement relationship/memory events.
-12. Implement date event rule engine and endpoints.
-13. Implement async job skeleton for TTS/image/memory.
-14. Implement admin minimum API.
-15. Add provider usage dashboard data endpoints.
+11. Implement chat relationship/memory base services. Done in `Server/`.
+12. Implement credit ledger and quota service.
+13. Implement date event rule engine and endpoints.
+14. Implement async job skeleton for TTS/image/memory.
+15. Implement admin minimum API.
+16. Add provider usage dashboard data endpoints.
 
 ## 11. Done criteria for backend skeleton
 

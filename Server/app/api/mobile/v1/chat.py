@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Header, HTTPException, status
 
 from app.dependencies import CurrentUserDep, DbSessionDep
-from app.schemas.chat import AiriReplyView, ChatTurnRequest, ChatTurnResponse
+from app.schemas.chat import AiriReplyView, ChatTurnRequest, ChatTurnResponse, MemoryFeedbackView, RelationshipFeedbackView
 from app.services.chat_turn_service import ChatTurnCommand, ChatTurnService
 
 router = APIRouter(prefix="/chat", tags=["mobile-chat"])
@@ -40,8 +40,23 @@ async def create_chat_turn(
             emotion=result.reply.emotion,
             intent=result.reply.intent,
         ),
-        relationship_feedback=None,
-        memory_feedback=None,
+        relationship_feedback=(
+            RelationshipFeedbackView(
+                changed=result.relationship_feedback.changed,
+                summary=result.relationship_feedback.summary,
+                event_id=result.relationship_feedback.event_id,
+            )
+            if result.relationship_feedback is not None
+            else None
+        ),
+        memory_feedback=(
+            MemoryFeedbackView(
+                candidate_created=result.memory_feedback.candidate_created,
+                summary=result.memory_feedback.summary,
+            )
+            if result.memory_feedback is not None
+            else None
+        ),
         date_suggestion=None,
         tts_job=None,
     )
