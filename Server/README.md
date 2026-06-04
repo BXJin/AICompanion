@@ -37,8 +37,14 @@ This is Phase 0 skeleton only:
 - Alembic migration for `users` and `user_sessions`.
 - Alembic migration for v1 domain baseline tables.
 - idempotent Airi seed and authenticated bootstrap aggregation.
+- authenticated `POST /api/mobile/v1/chat/turn` with conversation/message persistence and mock LLM replies.
 - common API schemas.
 - route/module boundaries.
 - mock LLM provider interface.
 
-Real auth providers, chat turn, ledger services, relationship/memory services, and real admin workflows are intentionally next steps.
+Real auth providers, provider usage logging, ledger services, relationship/memory services, and real admin workflows are intentionally next steps.
+
+Known current chat limits:
+
+- `Idempotency-Key` is required, but duplicate replay needs a later message/idempotency storage migration.
+- provider usage events are intentionally deferred to the provider usage logging session.

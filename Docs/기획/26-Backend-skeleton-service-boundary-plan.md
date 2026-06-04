@@ -449,7 +449,7 @@ Load/cost tests later:
 6. Implement auth/session guest flow.
 7. Implement credit ledger and quota service.
 8. Implement character seed and bootstrap endpoint. Done in `Server/`.
-9. Implement chat turn with mock LLM provider.
+9. Implement chat turn with mock LLM provider. Done in `Server/`.
 10. Implement relationship/memory events.
 11. Implement date event rule engine and endpoints.
 12. Implement async job skeleton for TTS/image/memory.

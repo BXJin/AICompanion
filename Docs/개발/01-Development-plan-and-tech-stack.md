@@ -608,6 +608,7 @@ Safety:
 - character, conversation/message, relationship snapshot/event, memory, credit ledger, provider usage, admin audit log 최소 SQLAlchemy model과 Alembic migration 생성 완료.
 - bootstrap endpoint 인증 적용 완료.
 - Airi character seed와 사용자별 초기 relationship snapshot을 보장하는 authenticated bootstrap 확장 완료.
+- authenticated `POST /api/mobile/v1/chat/turn` mock provider, conversation/message persistence 구현 완료.
 - admin auth dependency skeleton 생성 완료.
 - billing webhook signature skeleton 생성 완료.
 - pytest smoke test 통과.
@@ -616,8 +617,8 @@ Safety:
 다음 구현 순서:
 
 1. OpenAPI/Pydantic schema 확장
-2. chat turn mock provider 구현
-3. provider usage event logging 구현
+2. provider usage event logging 구현
+3. chat idempotency replay 저장 구조 보강
 4. relationship/memory service 구현
 5. quota/credit ledger service 구현
 6. date event rule engine 구현
