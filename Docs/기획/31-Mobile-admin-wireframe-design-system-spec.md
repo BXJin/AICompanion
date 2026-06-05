@@ -24,6 +24,47 @@
 - 운영/설정 화면은 감성보다 명확성을 우선한다.
 - paywall은 제공량, reset, credit 차감 기준을 숨기지 않는다.
 
+## 1.1 Portfolio mockup interpretation rule
+
+포트폴리오용 mockup board는 실제 Flutter 화면을 그대로 캡처한 것이 아니라, 기획 산출물을 시각화한 기준 자료다.
+
+따라서 개발/디자인 구현 시 다음처럼 해석한다.
+
+| Mockup element | 기획 의미 | 실제 앱 반영 |
+|---|---|---|
+| iPhone 여러 대가 한 장에 배치된 보드 | 화면 설계서/포트폴리오 설명 | 앱 구현 대상 아님 |
+| flow chip, 상태표, QA 표 | 기획/개발 협업 기준 | 문서/QA 기준으로 유지 |
+| Chat/Date/Rewards/Profile 화면 | 실제 앱 화면 | Flutter screen 구현 대상 |
+| quota/provider/safety 예외 화면 | 상태/에러 UX | component/state 구현 대상 |
+| rule engine 표 | 서버 결정 정책 | 앱에는 결과 설명만 노출 |
+| Airi portrait/hero visual | brand/art direction | onboarding/profile/reward에 제한 사용 |
+
+구현 원칙:
+
+- mockup의 감성 톤은 유지하되, 앱 화면은 더 단순하고 반복 사용에 적합해야 한다.
+- 모든 설명표를 앱 안에 넣지 않는다.
+- 사용자가 직접 보는 화면에는 목적, 다음 행동, 상태만 남긴다.
+- 기획서 board의 작은 텍스트는 실제 앱에서는 card, sheet, tooltip, settings help로 분산한다.
+- Flutter 구현은 이미지 board 복제가 아니라 screen/component/design token 재구성으로 진행한다.
+
+첫 구현 기준 화면:
+
+1. Onboarding / AI disclosure / consent.
+2. Chat home / first chat / quota exceeded.
+3. Date list.
+4. Date play.
+5. Date result.
+6. Rewards gallery.
+7. Profile / memory / plan.
+8. Exception states: provider degraded, safety blocked, queue pending.
+
+포트폴리오 board에만 남길 항목:
+
+- release flow chip.
+- D1 retention, quota 전환, rule engine QA 기준.
+- admin/ops dashboard 요약.
+- 기획 문서 번호와 버전 표기.
+
 ## 2. Navigation
 
 하단 탭:
@@ -103,6 +144,14 @@ Primary states:
 - offline/retry.
 - TTS pending/ready/failed.
 
+First chat loop requirements:
+
+- onboarding 직후 첫 대화는 Airi intro에서 자연스럽게 Chat으로 이어진다.
+- 첫 chat turn 안에 relationship feedback 또는 memory candidate 중 최소 1개를 보여준다.
+- first-time user에게는 reply suggestion chip을 2~3개까지 보여줄 수 있다.
+- reply suggestion은 상시 노출하지 않고 onboarding, idle, provider degraded, date step에서 보조로만 사용한다.
+- Airi의 daily persona 문장은 `22-Airi-character-profile-v1.md`의 small fiction policy를 따른다.
+
 Message actions:
 
 - copy.
@@ -113,6 +162,7 @@ Message actions:
 Acceptance:
 
 - first screen shows Airi, relationship level, and a clear input.
+- first chat shows relationship or memory feedback without blocking the conversation.
 - quota exceeded connects to ad/shop/upgrade with exact reason.
 - provider degraded gives useful fallback, not a silent failure.
 - report path is reachable from a message.
@@ -190,6 +240,12 @@ Layout:
 [Finish/result]
 ```
 
+Content tone:
+
+- Date play는 무거운 game UI보다 Airi와 함께하는 짧은 일상 activity처럼 보여야 한다.
+- 사용자의 자유 입력은 Airi reaction과 memory candidate에 사용하고, result는 rule engine이 결정한다.
+- 선택지는 QA와 안전성을 위해 유지하되, 사용자가 직접 말하는 느낌을 해치지 않도록 짧게 둔다.
+
 States:
 
 - move pending.
@@ -204,6 +260,7 @@ Acceptance:
 - choices are clear and tappable.
 - duplicate submit does not create duplicate reward/credit events.
 - result screen explains relationship/reward change.
+- result screen explains memory candidate when one is created.
 
 ### 3.6 Rewards gallery
 
@@ -216,6 +273,13 @@ Layout:
 [Moderation status]
 [Report]
 ```
+
+Reward naming:
+
+- 이미지 보상은 "실제 사진"으로 표현하지 않는다.
+- 권장 명칭은 `Airi 셀카`, `오늘 분위기로 만든 Airi 이미지`, `Shared Memory Card`다.
+- 상세 화면에는 `AI-generated` 또는 `생성 이미지` 배지를 표시한다.
+- 보상은 어떤 date/activity/memory에서 생성됐는지 source를 보여준다.
 
 States:
 
@@ -230,6 +294,7 @@ States:
 Acceptance:
 
 - generated media is not visible before moderation pass.
+- generated media has AI-generated labeling in detail view or badge.
 - rejected media explains status without exposing unsafe output.
 - reward detail has report path.
 
@@ -327,6 +392,10 @@ Core components:
 | CreditBalanceBadge | current credit and pending adjustments |
 | ReportSheet | target, category, details |
 | DeleteConfirmSheet | memory/account/media delete |
+| ReplySuggestionChip | first chat/date/provider degraded 대화 보조 |
+| MemoryCandidateCard | 기억 후보 요약, 기억하기/넘기기 |
+| AiriMomentReportCard | date/activity result, relationship delta, reward progress |
+| GeneratedMediaBadge | AI-generated/media moderation 상태 표시 |
 
 Component rules:
 
@@ -335,6 +404,8 @@ Component rules:
 - Quota notices must include feature route and reset/upgrade option.
 - Error components must show retry only when retry is safe.
 - Report/delete components must not be hidden behind long text.
+- Reply suggestions must not imply that the user has no agency in the conversation.
+- Generated media components must not claim a real photo or real recording.
 
 ## 5. Design tokens
 
@@ -365,6 +436,19 @@ Color roles:
 - danger.
 - premium.
 - disabled.
+
+Recommended initial palette:
+
+| Role | Direction |
+|---|---|
+| background | warm cream / off-white |
+| surface | white with soft shadow |
+| accent | sage green / deep green |
+| success | calm green |
+| warning | amber |
+| danger | soft red |
+| premium | muted gold |
+| dark_mode_surface | deep green-black for immersive chat/date states |
 
 Typography roles:
 
@@ -500,6 +584,9 @@ Required screenshots:
 - Reward gallery with safe unlocked/pending states.
 - Memory/profile with user control.
 - Plan/credit screen with transparent allowance.
+- Onboarding with AI disclosure, age gate, and memory/delete/report notice.
+- Airi Moment result report showing relationship, memory candidate, reward progress.
+- Generated media detail with AI-generated label and moderation status.
 
 Avoid:
 
@@ -508,6 +595,7 @@ Avoid:
 - fake unlimited claims.
 - screenshots showing unsafe generated media.
 - screenshots where AI disclosure is absent from onboarding material.
+- screenshots implying Airi sent a real photo or has a real-world verifiable location.
 
 ## 8. Definition of ready for design implementation
 
@@ -519,6 +607,8 @@ Mobile ready:
 - reusable components are listed.
 - permission copy exists.
 - store screenshot direction exists.
+- mockup board has been decomposed into actual app screens and non-app planning annotations.
+- first chat, date result, rewards, and profile all expose memory/relationship/reward links.
 
 Admin ready:
 
@@ -526,4 +616,3 @@ Admin ready:
 - moderation SLA draft exists.
 - sensitive actions require RBAC and audit.
 - cost/queue/moderation operations are visible.
-

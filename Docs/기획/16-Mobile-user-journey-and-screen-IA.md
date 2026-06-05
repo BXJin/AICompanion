@@ -624,6 +624,8 @@ Product:
 
 - 신규 사용자가 1분 안에 Airi와 첫 대화를 시작한다.
 - 첫 세션 안에 relationship 또는 memory feedback을 1회 이상 본다.
+- 첫 chat 또는 첫 date result에서 memory candidate가 생성되었는지 사용자가 이해할 수 있다.
+- Airi의 일상형 persona는 자연스럽게 보이되, 실제 사진/위치/실명/회사명/AI 정체성 부정으로 이어지지 않는다.
 - 사용자는 첫날 date event 1개를 발견할 수 있다.
 - date event 완료 후 relationship/reward/memory 중 최소 2개가 갱신된다.
 - Free 사용자도 voice/TTS/reward 중 최소 2개를 제한적으로 체험한다.
@@ -635,12 +637,14 @@ Engineering:
 - date result는 rule engine 결과로 기록된다.
 - reward unlock은 ledger/event로 추적된다.
 - provider 실패 시 fallback 또는 degraded state가 있다.
+- portfolio/mockup board의 설명표는 앱 화면이 아니라 QA/기획 산출물로 분리된다.
 
 Safety/ops:
 
 - age gate와 AI disclosure가 있다.
 - report/block/delete path가 있다.
 - generated media는 moderation status를 가진다.
+- generated media는 실제 사진처럼 표현하지 않고 AI-generated 맥락을 가진다.
 - admin이 user/report/credit/provider cost를 확인할 수 있다.
 
 ## 14. 다음 세부 설계로 넘길 항목
