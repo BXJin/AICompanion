@@ -100,6 +100,26 @@ class Memory(Base):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class AsyncJob(Base):
+    __tablename__ = "async_jobs"
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True, index=True)
+    job_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="queued")
+    priority: Mapped[int] = mapped_column(Integer, nullable=False, default=100)
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    provider: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    source_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    source_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    result_ref: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    error_code: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    payload_json: Mapped[dict[str, object]] = mapped_column(JSON, nullable=False, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
 class CreditLedger(Base):
     __tablename__ = "credit_ledger"
 
@@ -256,6 +276,8 @@ Index("ix_messages_user_created", Message.user_id, Message.created_at)
 Index("ix_relationship_events_user_character_created", RelationshipEvent.user_id, RelationshipEvent.character_id, RelationshipEvent.created_at)
 Index("ix_memories_user_character_status_importance", Memory.user_id, Memory.character_id, Memory.status, Memory.importance)
 Index("ix_memories_user_character_last_used", Memory.user_id, Memory.character_id, Memory.last_used_at)
+Index("ix_async_jobs_user_created", AsyncJob.user_id, AsyncJob.created_at)
+Index("ix_async_jobs_type_status_priority_created", AsyncJob.job_type, AsyncJob.status, AsyncJob.priority, AsyncJob.created_at)
 Index("ix_credit_ledger_user_created", CreditLedger.user_id, CreditLedger.created_at)
 Index("ix_credit_ledger_user_bucket_created", CreditLedger.user_id, CreditLedger.bucket, CreditLedger.created_at)
 Index("ux_credit_ledger_user_idempotency_key", CreditLedger.user_id, CreditLedger.idempotency_key, unique=True)

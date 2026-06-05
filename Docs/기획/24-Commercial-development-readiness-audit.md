@@ -242,7 +242,7 @@ Recommended next engineering sequence:
 11. Implement chat relationship event/snapshot update and preference memory candidates: done in `Server/`.
 12. Implement credit ledger and quota service: done in `Server/`.
 13. Implement date event rule engine from `19`: done in `Server/`.
-14. Implement memory activation/delete API and async extraction job skeleton.
+14. Implement memory activation/delete API and async extraction job skeleton: done in `Server/`.
 15. Implement reward/media async job skeleton.
 16. Implement billing webhook -> credit ledger integration.
 17. Implement minimum admin API.

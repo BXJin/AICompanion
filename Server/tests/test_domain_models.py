@@ -9,6 +9,7 @@ from app.database import create_session
 from app.models.base import Base
 from app.models.domain import (
     AdminAuditLog,
+    AsyncJob,
     Character,
     CharacterRelationshipSnapshot,
     Conversation,
@@ -50,6 +51,7 @@ def test_domain_baseline_tables_are_registered() -> None:
         "reward_events",
         "provider_usage_events",
         "admin_audit_logs",
+        "async_jobs",
     }
 
     assert expected_tables.issubset(set(Base.metadata.tables.keys()))
@@ -190,11 +192,31 @@ def test_domain_baseline_models_can_be_persisted(client: TestClient, test_settin
                 created_at=now,
             )
         )
+        db.add(
+            AsyncJob(
+                id=_id("async_job"),
+                user_id=user_id,
+                job_type="memory_extraction",
+                status="queued",
+                priority=100,
+                attempts=0,
+                provider=None,
+                source_type="message",
+                source_id=message_id,
+                result_ref=None,
+                error_code=None,
+                payload_json={},
+                created_at=now,
+                started_at=None,
+                finished_at=None,
+            )
+        )
         db.commit()
 
         assert db.get(Character, character_id) is not None
         assert db.get(Conversation, conversation_id) is not None
         assert db.get(Message, message_id) is not None
         assert db.get(CharacterRelationshipSnapshot, {"user_id": user_id, "character_id": character_id}) is not None
+        assert db.query(AsyncJob).filter_by(user_id=user_id, job_type="memory_extraction").one() is not None
     finally:
         db.close()

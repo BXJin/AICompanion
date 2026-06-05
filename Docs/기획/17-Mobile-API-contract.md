@@ -314,7 +314,9 @@ Response:
     },
     "memoryFeedback": {
       "candidateCreated": true,
-      "summary": "Airi may remember your movie taste."
+      "summary": "Airi may remember your movie taste.",
+      "memoryId": "uuid|null",
+      "extractionJobId": "uuid|null"
     },
     "dateSuggestion": {
       "eventId": "movie_talk",
@@ -450,7 +452,8 @@ Query:
 
 ```text
 characterId=airi
-status=active
+status=active|candidate|hidden|rejected
+limit=50
 ```
 
 Response:
@@ -461,15 +464,53 @@ Response:
     "items": [
       {
         "id": "uuid",
+        "characterId": "airi",
         "summary": "You like quiet movie nights.",
         "memoryType": "user_preference",
+        "status": "active",
         "importance": 3,
-        "createdAt": "2026-06-04T00:00:00Z"
+        "sourceMessageId": "uuid|null",
+        "createdAt": "2026-06-04T00:00:00Z",
+        "lastUsedAt": "2026-06-04T00:00:00Z|null",
+        "deletedAt": null
       }
     ]
   }
 }
 ```
+
+### POST /memories/{memoryId}/activate
+
+목적:
+
+- candidate memory를 active 상태로 전환한다.
+
+Response:
+
+```json
+{
+  "data": {
+    "memory": {
+      "id": "uuid",
+      "characterId": "airi",
+      "summary": "You like quiet movie nights.",
+      "memoryType": "user_preference",
+      "status": "active",
+      "importance": 3,
+      "sourceMessageId": "uuid|null",
+      "createdAt": "2026-06-04T00:00:00Z",
+      "lastUsedAt": null,
+      "deletedAt": null
+    }
+  }
+}
+```
+
+주의:
+
+- 첫 구현에서는 provider-backed extraction 전까지 candidate 검증/활성화 흐름을 검증하기 위한 API다.
+- active 또는 candidate 상태만 허용한다.
+- deleted memory는 활성화할 수 없다.
 
 ### DELETE /memories/{memoryId}
 
@@ -482,6 +523,7 @@ Response:
 - memory status를 즉시 hidden/deleted로 변경.
 - embedding/source link background delete.
 - audit/safety 필요 여부는 데이터 성격에 따라 결정.
+- 이후 retrieval과 `GET /memories?status=active`에서 즉시 제외된다.
 
 ## 8. Date events
 

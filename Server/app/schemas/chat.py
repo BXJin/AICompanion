@@ -42,6 +42,8 @@ class RelationshipFeedbackView(BaseModel):
 class MemoryFeedbackView(BaseModel):
     candidate_created: bool
     summary: str | None
+    memory_id: str | None = None
+    extraction_job_id: str | None = None
 
 
 class DateSuggestionView(BaseModel):

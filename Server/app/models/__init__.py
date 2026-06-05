@@ -2,6 +2,7 @@
 
 from app.models.domain import (
     AdminAuditLog,
+    AsyncJob,
     Character,
     CharacterRelationshipSnapshot,
     Conversation,
@@ -22,6 +23,7 @@ from app.models.user import User, UserSession
 
 __all__ = [
     "AdminAuditLog",
+    "AsyncJob",
     "Character",
     "CharacterRelationshipSnapshot",
     "Conversation",

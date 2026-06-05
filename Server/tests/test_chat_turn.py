@@ -8,6 +8,7 @@ from app.models.domain import (
     Conversation,
     Memory,
     Message,
+    AsyncJob,
     ProviderUsageEvent,
     QuotaCounter,
     RelationshipEvent,
@@ -72,6 +73,8 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
     assert payload["relationship_feedback"]["event_id"]
     assert payload["memory_feedback"]["candidate_created"] is True
     assert payload["memory_feedback"]["summary"] == "User shared a preference: I like quiet movies."
+    assert payload["memory_feedback"]["memory_id"]
+    assert payload["memory_feedback"]["extraction_job_id"]
 
     db = create_session(test_settings)
     try:
@@ -115,6 +118,7 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
         )
         memories = list(db.execute(select(Memory).where(Memory.user_id == session["user_id"])).scalars())
         quota_counter = db.query(QuotaCounter).filter_by(user_id=session["user_id"], feature="text_turn").one()
+        extraction_job = db.get(AsyncJob, payload["memory_feedback"]["extraction_job_id"])
         assert [event.metadata_json["event_type"] for event in relationship_events] == [
             "first_chat_completed",
             "user_shared_preference",
@@ -125,6 +129,11 @@ def test_chat_turn_with_mock_provider_creates_conversation_and_messages(client: 
         assert memories[0].status == "candidate"
         assert memories[0].memory_type == "preference"
         assert memories[0].source_message_id == user_message.id
+        assert extraction_job is not None
+        assert extraction_job.job_type == "memory_extraction"
+        assert extraction_job.status == "queued"
+        assert extraction_job.source_id == user_message.id
+        assert extraction_job.result_ref == memories[0].id
     finally:
         db.close()
 

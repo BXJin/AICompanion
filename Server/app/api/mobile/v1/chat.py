@@ -56,6 +56,8 @@ async def create_chat_turn(
             MemoryFeedbackView(
                 candidate_created=result.memory_feedback.candidate_created,
                 summary=result.memory_feedback.summary,
+                memory_id=result.memory_feedback.memory_id,
+                extraction_job_id=result.memory_feedback.extraction_job_id,
             )
             if result.memory_feedback is not None
             else None

@@ -12,6 +12,7 @@ from app.repositories.conversations import ConversationRepository
 from app.repositories.messages import MessageRepository
 from app.services.airi_seed_service import AIRI_CHARACTER_ID, AiriSeedService
 from app.services.app_bootstrap_service import AppBootstrapService
+from app.services.async_job_service import AsyncJobService
 from app.services.memory_service import MemoryCandidateResult, MemoryService
 from app.services.provider_usage_service import ProviderUsageRecordCommand, ProviderUsageService
 from app.services.quota_service import QuotaService
@@ -54,6 +55,7 @@ class ChatTurnService:
         self._quota = QuotaService(db)
         self._relationship_state = RelationshipStateService(db)
         self._memory_service = MemoryService(db)
+        self._async_jobs = AsyncJobService(db)
 
     async def create_turn(self, command: ChatTurnCommand) -> ChatTurnResult:
         if command.character_id != AIRI_CHARACTER_ID:
@@ -105,6 +107,17 @@ class ChatTurnService:
             character_id=character.id,
             source_message_id=user_message.id,
             text=command.input_text,
+        )
+        memory_extraction_job = self._async_jobs.enqueue_memory_extraction(
+            user_id=command.user_id,
+            source_message_id=user_message.id,
+            memory_id=memory_feedback.memory_id,
+        )
+        memory_feedback = MemoryCandidateResult(
+            candidate_created=memory_feedback.candidate_created,
+            memory_id=memory_feedback.memory_id,
+            summary=memory_feedback.summary,
+            extraction_job_id=memory_extraction_job.job_id,
         )
         if memory_feedback.candidate_created:
             preference_relationship_feedback = self._relationship_state.apply_chat_event(
