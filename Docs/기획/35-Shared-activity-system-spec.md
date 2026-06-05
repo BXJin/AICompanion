@@ -367,6 +367,13 @@ Rules:
 
 ## 14. PM decisions needed
 
+`36-Shared-activity-v1-1-product-package-plan.md`에서 v1.1 권장 패키지를 다음으로 정리했다.
+
+- Movie/Music Reflection 1개.
+- Quick Connect 1개.
+- Season Recap은 v1.2 visible feature로 지연하고 v1.1에서는 progress만 저장.
+- 사용자에게 `Bad Ending`은 노출하지 않고 내부 `unresolved`와 repair activity로 처리.
+
 To continue planning with PM, the next decisions are:
 
 1. Shared Activity brand name:

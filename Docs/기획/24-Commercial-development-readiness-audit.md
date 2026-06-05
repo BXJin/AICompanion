@@ -40,6 +40,7 @@
 | DB/ledger | `07`, `18` | covered | migration 수준 table/constraint/transaction 있음 |
 | date event rule | `19` | covered | 3개 event deterministic rule 있음 |
 | shared activity framework | `35` | planning added | v1 date events as proof, v1.1+ shared activity taxonomy, recommendation, result, season/repair model added |
+| shared activity v1.1 package | `36` | planning added | Movie/Music Reflection + Quick Connect recommended; visible Season Recap deferred to v1.2 |
 | mini-game/ending content | `34` | planning added | v1.1+ board-game candidates, reward/penalty, relationship branch, season ending criteria added; not v1 implementation scope |
 | plan/credit | `20` | covered with placeholders | allowance/credit/refund 기준 있음, 가격은 placeholder |
 | admin minimum | `21` | covered | 6개 필수 화면/RBAC/audit 있음 |

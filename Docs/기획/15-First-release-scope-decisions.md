@@ -223,6 +223,7 @@ main chat
 - Core proof: 첫 세션 안에 memory/relationship/reward 중 최소 1개 이상 피드백.
 - Date events: Movie talk date, Comfort date, Weekend plan date.
 - Shared Activity direction: `35-Shared-activity-system-spec.md`.
+- Shared Activity v1.1 package planning: `36-Shared-activity-v1-1-product-package-plan.md`.
 - Board-game candidates, game reward/penalty, relationship branch, season ending planning: `34-Companion-mini-game-content-candidate-research.md`.
 - Rule ownership: date result, reward unlock, relationship delta는 rule engine/ledger가 담당.
 - AI ownership: Airi reply, emotion, hint, diary, memory summary.
