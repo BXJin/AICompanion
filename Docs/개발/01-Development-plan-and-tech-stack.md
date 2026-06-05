@@ -44,6 +44,8 @@
   - PM/engineering decision register, development defaults, beta/commercial launch blockers.
 - `Docs/개발/03-Modular-monolith-and-service-boundary.md`
   - Python/FastAPI modular monolith 개발 규칙, service boundary, future split 기준.
+- `Docs/개발/04-Flutter-ui-implementation-plan.md`
+  - `Docs/Portfolio` 목업을 Flutter 실제 앱 화면, 컴포넌트, 디자인 토큰, mock data/API 연결 순서로 재구성하는 기준.
 
 ## 목적
 
