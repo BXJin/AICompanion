@@ -121,6 +121,28 @@
 36. `36-Shared-activity-v1-1-product-package-plan.md`
     - v1.1 Shared Activity 제품 패키지. Movie/Music Reflection, Quick Connect, Season Recap 지연 전략, reward/relationship/UX 판단.
 
+37. `37-Commercial-AI-chat-app-screenshot-analysis.md`
+    - Zeta/대파/크랙/블루미류 상용 AI chat 앱 스크린샷 기반 분석, roleplay/daily persona/선톡/셀카/리포트 패턴의 AICompanion 반영/제외 판단.
+
+## 운영 문서
+
+상용 출시 가능성 판단은 기획 완성도가 아니라 운영 증거로 판단한다. 아래 문서를 함께 본다.
+
+- `Docs/운영/00-Operations-master-index.md`
+  - 운영 문서 읽는 순서와 세션 간 사용 규칙.
+
+- `Docs/운영/01-Commercial-readiness-gate.md`
+  - closed beta, public beta, commercial launch Go/No-Go 기준.
+
+- `Docs/운영/02-Live-ops-playbook.md`
+  - daily/weekly 운영, CS, 비용 폭주, provider 장애, safety incident 대응.
+
+- `Docs/운영/03-Beta-metrics-cost-and-quality-validation.md`
+  - retention, latency, cost, conversion, safety, 캐릭터 품질 베타 검증 기준.
+
+- `Docs/운영/04-Character-consistency-and-content-quality-ops.md`
+  - Airi 이미지/음성/말투/memory 일관성 운영 기준.
+
 ## Archive
 
 중복되던 짧은 초안 문서는 `_archive/commercial-drafts-20260602/`로 이동했다. 최신 상용 설계 기준은 이 index에 적힌 문서만 따른다.

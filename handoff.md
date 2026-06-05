@@ -49,6 +49,11 @@ Authoritative planning docs:
 - `Docs/기획/36-Shared-activity-v1-1-product-package-plan.md`
 - `Docs/개발/01-Development-plan-and-tech-stack.md`
 - `Docs/개발/03-Modular-monolith-and-service-boundary.md`
+- `Docs/운영/00-Operations-master-index.md`
+- `Docs/운영/01-Commercial-readiness-gate.md`
+- `Docs/운영/02-Live-ops-playbook.md`
+- `Docs/운영/03-Beta-metrics-cost-and-quality-validation.md`
+- `Docs/운영/04-Character-consistency-and-content-quality-ops.md`
 
 ## 2. Session ownership map
 
@@ -171,6 +176,34 @@ Planning rule:
 
 - v1 scope stays focused on backend/mobile proof of Airi relationship loop.
 - v1.1 Shared Activity planning can continue, but should not derail current v1 backend sequence.
+- Commercial readiness claims must use `Docs/운영/01` and `Docs/운영/03` evidence, not planning intent.
+
+### Operations session
+
+Expected references:
+
+- `Docs/운영/00-Operations-master-index.md`
+- `Docs/운영/01-Commercial-readiness-gate.md`
+- `Docs/운영/02-Live-ops-playbook.md`
+- `Docs/운영/03-Beta-metrics-cost-and-quality-validation.md`
+- `Docs/운영/04-Character-consistency-and-content-quality-ops.md`
+- `Docs/기획/30-Production-ops-security-observability-analytics-plan.md`
+- `Docs/기획/32-QA-test-release-verification-plan.md`
+
+Operations first scope:
+
+- define dashboard ownership.
+- prepare beta report process.
+- define prompt/model/provider change log.
+- define kill switch owners.
+- validate character consistency before image reward launch.
+- run Go/No-Go readiness review before public beta or commercial launch.
+
+Operations must not:
+
+- approve launch based only on feature completion.
+- manually edit credit, reward, subscription, memory, or moderation state outside service/admin APIs.
+- accept image/voice/provider changes without cost, latency, safety, and character regression checks.
 
 ## 3. Cross-session contracts
 
@@ -219,6 +252,67 @@ LLM must not own:
 - relationship deltas.
 - safety policy decisions.
 
+### Contract change protocol
+
+This is the most important rule for parallel backend/mobile sessions.
+
+When the backend session changes any mobile-facing API, it must update all of these before finishing:
+
+- `Docs/기획/17-Mobile-API-contract.md`
+- affected Pydantic schemas under `Server/app/schemas/`
+- affected route behavior under `Server/app/api/mobile/v1/`
+- relevant tests under `Server/tests/`
+- this `handoff.md` if the mobile implementation needs to react differently
+
+When the mobile session finds an API mismatch, it must not silently work around it in UI state. It should update the handoff with:
+
+- endpoint
+- expected shape from docs
+- actual shape from server
+- blocking UI flow
+- proposed contract change
+
+Use this format in the session handoff section:
+
+```text
+API contract note:
+- Endpoint:
+- Change/mismatch:
+- Mobile impact:
+- Backend action:
+- Docs updated:
+```
+
+### Cross-session status board
+
+Backend status:
+
+- Current owner area: `Server/`
+- Current priority: finish v1 backend core loop before v1.1 shared activity implementation.
+- Must notify mobile session when: bootstrap, chat, date event, reward, memory, quota, auth, or error shape changes.
+
+Mobile status:
+
+- Current owner area: future `Mobile/` or `Client/`
+- Stack default: Flutter.
+- Must notify backend session when: UI requires a new field, new error state, pagination behavior, media playback ticket, or changed auth/session behavior.
+
+Admin status:
+
+- Current owner area: future `Admin/` or `WebAdmin/`
+- Must notify backend session when: admin read/write workflows require new audit fields, RBAC scopes, or manual ledger operations.
+
+Path note:
+
+- Some PowerShell output may show Korean folder names as mojibake.
+- If a path is hard to type, locate it by filename:
+
+```powershell
+rg --files Docs | rg "17-Mobile-API-contract"
+rg --files Docs | rg "31-Mobile-admin"
+rg --files Docs | rg "Operations-master-index"
+```
+
 ## 4. Current implementation risks
 
 - Chat idempotency is required by API shape, but full persistent replay is still a future item.
@@ -227,6 +321,8 @@ LLM must not own:
 - Billing webhook routes are skeletal; ledger integration is still pending.
 - Admin route boundary exists, but real admin workflows/RBAC/audit behavior are not complete.
 - Shared Activity v1.1 is planning only; do not implement it before v1 backend loop is complete unless PM explicitly changes priority.
+- No generated OpenAPI artifact is committed yet. Until it exists, `Docs/기획/17-Mobile-API-contract.md` and `Server/app/schemas/` must be manually kept in sync.
+- Mobile work has not started yet, so backend API changes are still cheaper now than after Flutter screens bind to them.
 
 ## 5. Handoff checklist for every session
 
@@ -236,6 +332,7 @@ Before starting:
 - Check `git status --short`.
 - Check the relevant docs for the area being touched.
 - Keep existing user changes; do not revert unrelated work.
+- Check whether the work changes a cross-session contract.
 
 Before finishing:
 
@@ -243,3 +340,4 @@ Before finishing:
 - Update docs if behavior, settings, or limitations changed.
 - Summarize changed files.
 - Commit and push if this session produced repo changes.
+- If any mobile-facing API changed, add an API contract note above.

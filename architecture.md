@@ -166,6 +166,26 @@ Important mobile states:
 - memory candidate/active/delete pending.
 - payment pending/webhook delayed.
 
+Mobile/backend contract rules:
+
+- Mobile binds to `/api/mobile/v1/*` only.
+- Mobile screen state must be driven by server response fields, not guessed local business rules.
+- Mobile may show optimistic pending states, but final result/reward/relationship/credit state comes from the server.
+- Mobile must support documented degraded states: quota exceeded, provider degraded, safety blocked, job pending, job failed, duplicate/idempotent replay.
+- Mobile API response changes require updates to `Docs/기획/17-Mobile-API-contract.md`.
+- Backend schema changes require mobile impact review before commit when mobile implementation has started.
+
+Recommended mobile contract source order:
+
+```text
+1. Server/app/schemas/
+2. Server/app/api/mobile/v1/
+3. Docs/기획/17-Mobile-API-contract.md
+4. Docs/기획/16-Mobile-user-journey-and-screen-IA.md
+```
+
+If these disagree, treat it as a contract bug and update docs/code together.
+
 ## 6. Admin architecture
 
 Admin is a separate surface, not a mobile mode.
@@ -251,3 +271,5 @@ Split trigger examples:
 - Credit/reward/payment changes are auditable.
 - Mobile/admin/webhook boundaries remain separate.
 - Docs must be updated when behavior changes.
+- Cross-session contract changes must be written in `handoff.md` before the session ends.
+- Mobile-facing schemas and planning docs must not drift once Flutter implementation starts.

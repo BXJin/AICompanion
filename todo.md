@@ -8,6 +8,16 @@ This file tracks cross-session work. It is intentionally higher level than issue
 
 Keep finishing the v1 backend core loop before starting v1.1 Shared Activity implementation.
 
+## Cross-session coordination
+
+- [ ] Generate and commit an OpenAPI artifact once the mobile API stabilizes.
+- [ ] Keep `Docs/기획/17-Mobile-API-contract.md` synchronized with `Server/app/schemas/`.
+- [ ] Add API contract notes to `handoff.md` whenever backend changes mobile-facing response shapes.
+- [ ] Mobile session must report any server/docs mismatch in `handoff.md` before adding UI workarounds.
+- [ ] Decide final mobile workspace name: `Mobile/` or `Client/`.
+- [ ] Decide whether Flutter project includes admin preview tooling or mobile only.
+- [ ] Add a lightweight API contract test that compares key documented endpoints against current schemas.
+
 ## Backend v1
 
 Completed:
@@ -95,6 +105,15 @@ Planning only. Do not start until PM explicitly prioritizes v1.1 or v1 backend c
 - [ ] Image/TTS provider choice.
 - [ ] Admin deployment model.
 - [ ] Store screenshot/copy review.
+
+## Operations readiness
+
+- [ ] Review `Docs/운영/01-Commercial-readiness-gate.md` before closed beta scope freeze.
+- [ ] Define dashboard owners for daily ops metrics in `Docs/운영/02-Live-ops-playbook.md`.
+- [ ] Prepare beta report template from `Docs/운영/03-Beta-metrics-cost-and-quality-validation.md`.
+- [ ] Run Airi character consistency QA from `Docs/운영/04-Character-consistency-and-content-quality-ops.md` before image reward launch.
+- [ ] Define prompt/model/provider change log process for live ops.
+- [ ] Define kill switch implementation owner for chat/STT/TTS/image/memory/billing routes.
 
 ## QA/release gates
 
